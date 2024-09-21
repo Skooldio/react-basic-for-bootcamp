@@ -4,7 +4,7 @@ const formatTime = (time) => {
   const seconds = time % 60;
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
-const COUNTDOWN_INTERVAL = 10;
+const COUNTDOWN_INTERVAL = 1000;
 const usePomodoro = () => {
   const [initialSessionTimer, setInitialSessionTimer] = useState(2);
   const [initialBreakTimer, setInitialBreakTimer] = useState(1);

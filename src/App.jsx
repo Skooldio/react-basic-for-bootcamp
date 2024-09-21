@@ -1,5 +1,5 @@
 import usePomodoro from "./utils/usePomodoro";
-import { Button } from "./components";
+import { Button, RoundedButton } from "./components";
 
 function App() {
   const {
@@ -37,22 +37,18 @@ function App() {
             <p>Session timer</p>
             <p className="font-bold">{initialSessionTimer}</p>
             <div className="flex w-full justify-between">
-              <button
-                className="rounded-btn"
+              <RoundedButton
                 onClick={() => setInitialSessionTimer((prev) => prev - 1)}
-                disabled={
+                disableButton={
                   !allowChangeSetting || isCounting || initialSessionTimer <= 0
                 }
-              >
-                -
-              </button>
-              <button
-                className="rounded-btn"
+                buttonText={"-"}
+              />
+              <RoundedButton
                 onClick={() => setInitialSessionTimer((prev) => prev + 1)}
-                disabled={!allowChangeSetting || isCounting}
-              >
-                +
-              </button>
+                buttonText={"+"}
+                disableButton={!allowChangeSetting || isCounting}
+              />
             </div>
           </div>
 
@@ -60,22 +56,18 @@ function App() {
             <p>Break timer</p>
             <p className="font-bold">{initialBreakTimer}</p>
             <div className="flex w-full justify-between">
-              <button
-                className="rounded-btn"
+              <RoundedButton
                 onClick={() => setInitialBreakTimer((prev) => prev - 1)}
-                disabled={
+                disableButton={
                   !allowChangeSetting || isCounting || initialBreakTimer <= 0
                 }
-              >
-                -
-              </button>
-              <button
-                className="rounded-btn"
+                buttonText={"-"}
+              />
+              <RoundedButton
                 onClick={() => setInitialBreakTimer((prev) => prev + 1)}
-                disabled={!allowChangeSetting || isCounting}
-              >
-                +
-              </button>
+                disableButton={!allowChangeSetting || isCounting}
+                buttonText={"+"}
+              />
             </div>
           </div>
         </div>
