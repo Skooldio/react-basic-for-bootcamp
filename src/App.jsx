@@ -1,63 +1,17 @@
-import { useState, useEffect } from "react";
+import usePomodoro from "./utils/usePomodoro";
 
-const formatTime = (time) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-};
-
-const COUNTDOWN_INTERVAL = 1000;
 function App() {
-  const [initialSessionTimer, setInitialSessionTimer] = useState(2);
-  const [initialBreakTimer, setInitialBreakTimer] = useState(1);
-  const [sessionTimer, setSessionTimer] = useState(initialSessionTimer * 60);
-  const [breakTimer, setBreakTimer] = useState(initialBreakTimer * 60);
-  const [isCounting, setIsCounting] = useState(false);
-  const [isOnBreak, setIsOnBreak] = useState(false);
-
-  useEffect(() => {
-    setSessionTimer(initialSessionTimer * 60);
-  }, [initialSessionTimer]);
-  useEffect(() => {
-    setBreakTimer(initialBreakTimer * 60);
-  }, [initialBreakTimer]);
-
-  useEffect(() => {
-    let id = undefined;
-    if (isOnBreak) {
-      id = isCounting
-        ? setInterval(() => {
-            setBreakTimer((prev) => {
-              if (prev > 0) {
-                return prev - 1;
-              } else {
-                setIsOnBreak(false);
-                setSessionTimer(initialSessionTimer * 60);
-                return 0;
-              }
-            });
-          }, COUNTDOWN_INTERVAL)
-        : undefined;
-    } else {
-      id = isCounting
-        ? setInterval(() => {
-            setSessionTimer((prev) => {
-              if (prev > 0) {
-                return prev - 1;
-              } else {
-                setIsOnBreak(true);
-                setBreakTimer(initialBreakTimer * 60);
-                return 0;
-              }
-            });
-          }, COUNTDOWN_INTERVAL)
-        : undefined;
-    }
-
-    return () => {
-      clearInterval(id);
-    };
-  }, [initialBreakTimer, initialSessionTimer, isCounting, isOnBreak]);
+  const {
+    initialBreakTimer,
+    initialSessionTimer,
+    setInitialBreakTimer,
+    setInitialSessionTimer,
+    displayedTimer,
+    isOnBreak,
+    isCounting,
+    resetTimer,
+    setIsCounting,
+  } = usePomodoro();
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -66,7 +20,7 @@ function App() {
       <div className="bg-redwood flex flex-col justify-center items-center w-4/5">
         <div className=" w-1/3 flex flex-col justify-center items-center p-2">
           <h2>{isOnBreak ? "Break" : "Session"}</h2>
-          <h2>{formatTime(isOnBreak ? breakTimer : sessionTimer)}</h2>
+          <h2>{displayedTimer}</h2>
           <div className="flex justify-between w-full">
             <button className="btn" onClick={() => setIsCounting(!isCounting)}>
               {isCounting ? "pause" : "start"}
@@ -74,10 +28,7 @@ function App() {
             <button
               className="btn"
               onClick={() => {
-                setIsCounting(false);
-                setIsOnBreak(false);
-                setSessionTimer(initialSessionTimer * 60);
-                setBreakTimer(initialBreakTimer * 60);
+                resetTimer();
               }}
             >
               reset
