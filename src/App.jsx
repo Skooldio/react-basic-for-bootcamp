@@ -11,6 +11,7 @@ function App() {
     isCounting,
     resetTimer,
     setIsCounting,
+    allowChangeSetting,
   } = usePomodoro();
 
   return (
@@ -44,14 +45,16 @@ function App() {
               <button
                 className="rounded-btn"
                 onClick={() => setInitialSessionTimer((prev) => prev - 1)}
-                disabled={isCounting || initialSessionTimer <= 0}
+                disabled={
+                  !allowChangeSetting || isCounting || initialSessionTimer <= 0
+                }
               >
                 -
               </button>
               <button
                 className="rounded-btn"
                 onClick={() => setInitialSessionTimer((prev) => prev + 1)}
-                disabled={isCounting}
+                disabled={!allowChangeSetting || isCounting}
               >
                 +
               </button>
@@ -65,14 +68,16 @@ function App() {
               <button
                 className="rounded-btn"
                 onClick={() => setInitialBreakTimer((prev) => prev - 1)}
-                disabled={isCounting || initialBreakTimer <= 0}
+                disabled={
+                  !allowChangeSetting || isCounting || initialBreakTimer <= 0
+                }
               >
                 -
               </button>
               <button
                 className="rounded-btn"
                 onClick={() => setInitialBreakTimer((prev) => prev + 1)}
-                disabled={isCounting}
+                disabled={!allowChangeSetting || isCounting}
               >
                 +
               </button>

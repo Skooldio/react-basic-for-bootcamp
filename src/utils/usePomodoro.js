@@ -60,6 +60,11 @@ const usePomodoro = () => {
     setSessionTimer(initialSessionTimer * 60);
     setBreakTimer(initialBreakTimer * 60);
   };
+
+  const allowChangeSetting =
+    breakTimer === initialBreakTimer * 60 &&
+    sessionTimer === initialSessionTimer * 60;
+
   return {
     initialSessionTimer,
     initialBreakTimer,
@@ -68,6 +73,7 @@ const usePomodoro = () => {
     setIsCounting,
     isOnBreak,
     isCounting,
+    allowChangeSetting,
     resetTimer,
     displayedTimer: formatTime(isOnBreak ? breakTimer : sessionTimer),
   };
