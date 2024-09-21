@@ -11,6 +11,7 @@ function App() {
   const [initialBreakTimer, setInitialBreakTimer] = useState(5);
   const [sessionTimer, setSessionTimer] = useState(initialSessionTimer * 60);
   const [breakTimer, setBreakTimer] = useState(initialBreakTimer * 60);
+  const [isCounting, setIsCounting] = useState(false);
 
   useEffect(() => {
     setSessionTimer(initialSessionTimer * 60);
@@ -18,6 +19,20 @@ function App() {
   useEffect(() => {
     setBreakTimer(initialBreakTimer * 60);
   }, [initialBreakTimer]);
+
+  useEffect(() => {
+    const id = isCounting
+      ? setInterval(() => {
+          setSessionTimer((prev) => prev - 1);
+        }, 1000)
+      : undefined;
+
+    return () => {
+      if (isCounting) {
+        clearInterval(id);
+      }
+    };
+  }, [isCounting]);
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -28,8 +43,19 @@ function App() {
           <h2>Session</h2>
           <h2>{formatTime(sessionTimer)}</h2>
           <div className="flex justify-between w-full">
-            <button className="btn">start</button>
-            <button className="btn">reset</button>
+            <button className="btn" onClick={() => setIsCounting(!isCounting)}>
+              {isCounting ? "pause" : "start"}
+            </button>
+            <button
+              className="btn"
+              onClick={() => {
+                setIsCounting(false);
+                setSessionTimer(initialSessionTimer * 60);
+                setBreakTimer(initialBreakTimer * 60);
+              }}
+            >
+              reset
+            </button>
           </div>
         </div>
 
@@ -41,13 +67,14 @@ function App() {
               <button
                 className="rounded-btn"
                 onClick={() => setInitialSessionTimer((prev) => prev - 1)}
-                disabled={initialSessionTimer <= 0}
+                disabled={isCounting || initialSessionTimer <= 0}
               >
                 -
               </button>
               <button
                 className="rounded-btn"
                 onClick={() => setInitialSessionTimer((prev) => prev + 1)}
+                disabled={isCounting}
               >
                 +
               </button>
@@ -61,13 +88,14 @@ function App() {
               <button
                 className="rounded-btn"
                 onClick={() => setInitialBreakTimer((prev) => prev - 1)}
-                disabled={initialBreakTimer <= 0}
+                disabled={isCounting || initialBreakTimer <= 0}
               >
                 -
               </button>
               <button
                 className="rounded-btn"
                 onClick={() => setInitialBreakTimer((prev) => prev + 1)}
+                disabled={isCounting}
               >
                 +
               </button>
