@@ -6,12 +6,14 @@ const formatTime = (time) => {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
+const COUNTDOWN_INTERVAL = 1000;
 function App() {
-  const [initialSessionTimer, setInitialSessionTimer] = useState(25);
-  const [initialBreakTimer, setInitialBreakTimer] = useState(5);
+  const [initialSessionTimer, setInitialSessionTimer] = useState(2);
+  const [initialBreakTimer, setInitialBreakTimer] = useState(1);
   const [sessionTimer, setSessionTimer] = useState(initialSessionTimer * 60);
   const [breakTimer, setBreakTimer] = useState(initialBreakTimer * 60);
   const [isCounting, setIsCounting] = useState(false);
+  const [isOnBreak, setIsOnBreak] = useState(false);
 
   useEffect(() => {
     setSessionTimer(initialSessionTimer * 60);
@@ -21,18 +23,41 @@ function App() {
   }, [initialBreakTimer]);
 
   useEffect(() => {
-    const id = isCounting
-      ? setInterval(() => {
-          setSessionTimer((prev) => prev - 1);
-        }, 1000)
-      : undefined;
+    let id = undefined;
+    if (isOnBreak) {
+      id = isCounting
+        ? setInterval(() => {
+            setBreakTimer((prev) => {
+              if (prev > 0) {
+                return prev - 1;
+              } else {
+                setIsOnBreak(false);
+                setSessionTimer(initialSessionTimer * 60);
+                return 0;
+              }
+            });
+          }, COUNTDOWN_INTERVAL)
+        : undefined;
+    } else {
+      id = isCounting
+        ? setInterval(() => {
+            setSessionTimer((prev) => {
+              if (prev > 0) {
+                return prev - 1;
+              } else {
+                setIsOnBreak(true);
+                setBreakTimer(initialBreakTimer * 60);
+                return 0;
+              }
+            });
+          }, COUNTDOWN_INTERVAL)
+        : undefined;
+    }
 
     return () => {
-      if (isCounting) {
-        clearInterval(id);
-      }
+      clearInterval(id);
     };
-  }, [isCounting]);
+  }, [initialBreakTimer, initialSessionTimer, isCounting, isOnBreak]);
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -40,8 +65,8 @@ function App() {
 
       <div className="bg-redwood flex flex-col justify-center items-center w-4/5">
         <div className=" w-1/3 flex flex-col justify-center items-center p-2">
-          <h2>Session</h2>
-          <h2>{formatTime(sessionTimer)}</h2>
+          <h2>{isOnBreak ? "Break" : "Session"}</h2>
+          <h2>{formatTime(isOnBreak ? breakTimer : sessionTimer)}</h2>
           <div className="flex justify-between w-full">
             <button className="btn" onClick={() => setIsCounting(!isCounting)}>
               {isCounting ? "pause" : "start"}
@@ -50,6 +75,7 @@ function App() {
               className="btn"
               onClick={() => {
                 setIsCounting(false);
+                setIsOnBreak(false);
                 setSessionTimer(initialSessionTimer * 60);
                 setBreakTimer(initialBreakTimer * 60);
               }}
