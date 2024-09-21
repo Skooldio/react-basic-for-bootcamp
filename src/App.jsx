@@ -1,5 +1,5 @@
 import usePomodoro from "./utils/usePomodoro";
-import { Button, RoundedButton } from "./components";
+import { Button, SettingSection } from "./components";
 
 function App() {
   const {
@@ -33,43 +33,33 @@ function App() {
         </div>
 
         <div className="flex justify-between w-full ">
-          <div className="setting-box">
-            <p>Session timer</p>
-            <p className="font-bold">{initialSessionTimer}</p>
-            <div className="flex w-full justify-between">
-              <RoundedButton
-                onClick={() => setInitialSessionTimer((prev) => prev - 1)}
-                disableButton={
-                  !allowChangeSetting || isCounting || initialSessionTimer <= 0
-                }
-                buttonText={"-"}
-              />
-              <RoundedButton
-                onClick={() => setInitialSessionTimer((prev) => prev + 1)}
-                buttonText={"+"}
-                disableButton={!allowChangeSetting || isCounting}
-              />
-            </div>
-          </div>
+          <SettingSection
+            title="Session timer"
+            value={initialSessionTimer}
+            decrementButtonProps={{
+              onClick: () => setInitialSessionTimer((prev) => prev - 1),
+              disableButton:
+                !allowChangeSetting || isCounting || initialSessionTimer <= 0,
+            }}
+            incrementButtonProps={{
+              onClick: () => setInitialSessionTimer((prev) => prev + 1),
+              disableButton: !allowChangeSetting || isCounting,
+            }}
+          />
 
-          <div className="setting-box">
-            <p>Break timer</p>
-            <p className="font-bold">{initialBreakTimer}</p>
-            <div className="flex w-full justify-between">
-              <RoundedButton
-                onClick={() => setInitialBreakTimer((prev) => prev - 1)}
-                disableButton={
-                  !allowChangeSetting || isCounting || initialBreakTimer <= 0
-                }
-                buttonText={"-"}
-              />
-              <RoundedButton
-                onClick={() => setInitialBreakTimer((prev) => prev + 1)}
-                disableButton={!allowChangeSetting || isCounting}
-                buttonText={"+"}
-              />
-            </div>
-          </div>
+          <SettingSection
+            title="Break timer"
+            value={initialBreakTimer}
+            decrementButtonProps={{
+              onClick: () => setInitialBreakTimer((prev) => prev - 1),
+              disableButton:
+                !allowChangeSetting || isCounting || initialBreakTimer <= 0,
+            }}
+            incrementButtonProps={{
+              onClick: () => setInitialBreakTimer((prev) => prev + 1),
+              disableButton: !allowChangeSetting || isCounting,
+            }}
+          />
         </div>
       </div>
     </div>

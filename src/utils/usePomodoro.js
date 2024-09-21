@@ -6,8 +6,8 @@ const formatTime = (time) => {
 };
 const COUNTDOWN_INTERVAL = 1000;
 const usePomodoro = () => {
-  const [initialSessionTimer, setInitialSessionTimer] = useState(2);
-  const [initialBreakTimer, setInitialBreakTimer] = useState(1);
+  const [initialSessionTimer, setInitialSessionTimer] = useState(25);
+  const [initialBreakTimer, setInitialBreakTimer] = useState(5);
   const [sessionTimer, setSessionTimer] = useState(initialSessionTimer);
   const [breakTimer, setBreakTimer] = useState(initialBreakTimer);
   const [isCounting, setIsCounting] = useState(false);
