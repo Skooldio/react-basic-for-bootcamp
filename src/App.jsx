@@ -1,4 +1,5 @@
 import usePomodoro from "./utils/usePomodoro";
+import { Button } from "./components";
 
 function App() {
   const {
@@ -23,17 +24,11 @@ function App() {
           <h2>{isOnBreak ? "Break" : "Session"}</h2>
           <h2>{displayedTimer}</h2>
           <div className="flex justify-between w-full">
-            <button className="btn" onClick={() => setIsCounting(!isCounting)}>
-              {isCounting ? "pause" : "start"}
-            </button>
-            <button
-              className="btn"
-              onClick={() => {
-                resetTimer();
-              }}
-            >
-              reset
-            </button>
+            <Button
+              onClick={() => setIsCounting(!isCounting)}
+              buttonText={isCounting ? "pause" : "start"}
+            />
+            <Button onClick={() => resetTimer()} buttonText={"reset"} />
           </div>
         </div>
 
