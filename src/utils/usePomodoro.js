@@ -8,8 +8,8 @@ const COUNTDOWN_INTERVAL = 1000;
 const usePomodoro = () => {
   const [initialSessionTimer, setInitialSessionTimer] = useState(25);
   const [initialBreakTimer, setInitialBreakTimer] = useState(5);
-  const [sessionTimer, setSessionTimer] = useState(initialSessionTimer);
-  const [breakTimer, setBreakTimer] = useState(initialBreakTimer);
+  const [sessionTimer, setSessionTimer] = useState(initialSessionTimer * 60);
+  const [breakTimer, setBreakTimer] = useState(initialBreakTimer * 60);
   const [isCounting, setIsCounting] = useState(false);
   const [isOnBreak, setIsOnBreak] = useState(false);
   useEffect(() => {
